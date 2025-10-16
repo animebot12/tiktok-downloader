@@ -19,6 +19,18 @@
             --shadow: rgba(255, 0, 80, 0.1);
         }
 
+        [data-theme="light"] {
+            --primary: #ff0050;
+            --primary-dark: #e00046;
+            --secondary: #00f2ea;
+            --background: #ffffff;
+            --surface: #f8f9fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --border: #e0e0e0;
+            --shadow: rgba(255, 0, 80, 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -27,16 +39,65 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--background) 0%, #1a0a14 100%);
+            background: linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
             color: var(--text-primary);
             min-height: 100vh;
             padding: 20px;
             line-height: 1.6;
+            transition: all 0.3s ease;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tools-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .tools-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 80, 0.3);
         }
 
         .header {
@@ -92,6 +153,12 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
         }
 
         .feature i {
@@ -106,6 +173,7 @@
             font-weight: 500;
         }
 
+        /* Download Card */
         .download-card {
             background: var(--surface);
             border-radius: 20px;
@@ -113,6 +181,7 @@
             box-shadow: 0 20px 40px var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
 
         .input-group {
@@ -189,6 +258,19 @@
             box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
         }
 
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Result Section */
         .result {
             margin-top: 30px;
             display: none;
@@ -266,6 +348,7 @@
             color: var(--text-secondary);
         }
 
+        /* Loading and Messages */
         .loading {
             display: none;
             text-align: center;
@@ -304,12 +387,14 @@
             margin-top: 20px;
         }
 
+        /* Instructions */
         .instructions {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 25px;
             margin-top: 30px;
             border: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
 
         .instructions h3 {
@@ -335,6 +420,7 @@
             color: var(--primary);
         }
 
+        /* Footer */
         .footer {
             text-align: center;
             margin-top: 40px;
@@ -433,6 +519,12 @@
             .features {
                 grid-template-columns: 1fr;
             }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -467,6 +559,17 @@
 
     <!-- Main Content -->
     <div class="container">
+        <!-- Header Top with Theme Toggle and Tools Button -->
+        <div class="header-top">
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+            
+            <a href="#" class="tools-btn" id="toolsLink">
+                <i class="fas fa-tools"></i> Get More Tools
+            </a>
+        </div>
+
         <div class="header">
             <div class="logo">
                 <div class="logo-icon">
@@ -571,6 +674,7 @@
         const commentsCount = document.getElementById('commentsCount');
         const sharesCount = document.getElementById('sharesCount');
         const downloadOptions = document.getElementById('downloadOptions');
+        const toolsLink = document.getElementById('toolsLink');
         
         // Share wall elements
         const shareWall = document.getElementById('shareWall');
@@ -582,6 +686,41 @@
         let downloadCount = 0;
         const maxDownloads = 5;
         let userIP = '';
+
+        // Theme management
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const themeToggle = document.querySelector('.theme-toggle');
+            if (theme === 'dark') {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            }
+        }
+
+        // Tools link setup
+        function setupToolsLink() {
+            // You can update this URL later when you have more tools
+            toolsLink.href = '#';
+            toolsLink.onclick = function(e) {
+                e.preventDefault();
+                alert('More tools coming soon! Stay tuned.');
+            };
+        }
 
         // Initialize session and get IP
         async function initializeSession() {
@@ -836,8 +975,10 @@ Best TikTok video downloader! Download videos without watermark in HD quality.
             }
         });
 
-        // Initialize
+        // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            setupToolsLink();
             initializeSession();
             videoUrlInput.focus();
         });
