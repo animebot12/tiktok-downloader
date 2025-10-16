@@ -1,1 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr.Arslan Toolkit - TikTok Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff0050;
+            --primary-dark: #e00046;
+            --secondary: #00f2ea;
+            --background: #0a0a0a;
+            --surface: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #333333;
+            --shadow: rgba(255, 0, 80, 0.1);
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #1a0a14 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .feature i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .feature span {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .download-card {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 0, 80, 0.1);
+        }
+
+        .url-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 0, 80, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+        }
+
+        .btn-whatsapp:hover {
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        .result {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .video-preview {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: block;
+            border: 2px solid var(--border);
+        }
+
+        .video-info {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .video-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .video-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .download-btn {
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background: rgba(255, 0, 80, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .download-btn i {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .download-btn span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .download-btn .quality {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .instructions h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .steps li i {
+            color: var(--primary);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Share Wall Styles */
+        .share-wall {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .share-content {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .share-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .share-progress {
+            margin: 20px 0;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .share-count {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .share-note {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .download-card {
+                padding: 25px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Share Wall -->
+    <div id="shareWall" class="share-wall">
+        <div class="share-content">
+            <div class="share-icon">
+                <i class="fas fa-share-alt"></i>
+            </div>
+            <h2>Enjoying Our Tool?</h2>
+            <p>Share with 5 friends to continue using unlimited downloads</p>
+            
+            <div class="share-progress">
+                <div class="progress-text">Downloads used: <span id="currentDownload">0</span>/5</div>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="share-count" id="shareCount">0/5</div>
+
+            <button class="btn btn-whatsapp" onclick="shareOnWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Share on WhatsApp
+            </button>
+
+            <div class="share-note">
+                After sharing, you can continue downloading
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fab fa-tiktok"></i>
+                </div>
+                <h1>Mr.Arslan Toolkit</h1>
+            </div>
+            <p class="tagline">Download TikTok videos without watermark - Created by Mr.Arslan</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-download"></i>
+                    <span>No Watermark</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-hd-video"></i>
+                    <span>HD Quality</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <span>Fast Download</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Safe & Secure</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-card">
+            <div class="input-group">
+                <label class="input-label">TikTok Video URL</label>
+                <input type="text" id="videoUrl" class="url-input" 
+                       placeholder="Paste TikTok video link here..." 
+                       value="https://vm.tiktok.com/ZSYYBr5GX/">
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    <span id="errorText">Please enter a valid TikTok URL</span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="downloadVideo()" id="downloadBtn">
+                <i class="fas fa-download"></i> Download Video
+            </button>
+
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p>Processing your video...</p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i> Video processed successfully!
+            </div>
+
+            <div class="result" id="result">
+                <div class="video-info">
+                    <img id="videoThumb" class="video-preview" alt="Video thumbnail">
+                    <div class="video-title" id="videoTitle">Video Title</div>
+                    <div class="video-stats">
+                        <span><i class="fas fa-heart"></i> <span id="likesCount">0</span></span>
+                        <span><i class="fas fa-comment"></i> <span id="commentsCount">0</span></span>
+                        <span><i class="fas fa-share"></i> <span id="sharesCount">0</span></span>
+                    </div>
+                </div>
+
+                <div class="download-options" id="downloadOptions">
+                    <!-- Download buttons will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>How to Download TikTok Videos</h3>
+            <ul class="steps">
+                <li><i class="fas fa-copy"></i> Copy TikTok video link from the app</li>
+                <li><i class="fas fa-paste"></i> Paste the link in the input above</li>
+                <li><i class="fas fa-download"></i> Click download and choose quality</li>
+                <li><i class="fas fa-save"></i> Save video to your device</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Mr.Arslan Toolkit. All rights reserved.</p>
+            <p>Created by Mr.Arslan | This tool is for personal use only.</p>
+        </div>
+    </div>
+
+    <script>
+        // API endpoint
+        const API_URL = 'https://tikwm.com/api/';
+
+        // DOM elements
+        const videoUrlInput = document.getElementById('videoUrl');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const videoThumb = document.getElementById('videoThumb');
+        const videoTitle = document.getElementById('videoTitle');
+        const likesCount = document.getElementById('likesCount');
+        const commentsCount = document.getElementById('commentsCount');
+        const sharesCount = document.getElementById('sharesCount');
+        const downloadOptions = document.getElementById('downloadOptions');
+        
+        // Share wall elements
+        const shareWall = document.getElementById('shareWall');
+        const currentDownload = document.getElementById('currentDownload');
+        const shareCount = document.getElementById('shareCount');
+        const progressFill = document.getElementById('progressFill');
+
+        // Download tracking with IP-based sessions
+        let downloadCount = 0;
+        const maxDownloads = 5;
+        let userIP = '';
+
+        // Initialize session and get IP
+        async function initializeSession() {
+            try {
+                // Get current IP address
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                userIP = ipData.ip;
+                
+                // Get stored IP and download count
+                const storedIP = localStorage.getItem('userIP');
+                const storedCount = localStorage.getItem('downloadCount');
+                
+                // If IP changed or no session exists, create new session
+                if (userIP !== storedIP || !storedCount) {
+                    localStorage.setItem('userIP', userIP);
+                    localStorage.setItem('downloadCount', '0');
+                    downloadCount = 0;
+                } else {
+                    downloadCount = parseInt(storedCount) || 0;
+                }
+                
+                updateDownloadDisplay();
+                
+            } catch (error) {
+                console.log('IP detection failed, using fallback');
+                // Fallback to simple tracking
+                const storedCount = localStorage.getItem('downloadCount');
+                downloadCount = parseInt(storedCount) || 0;
+                updateDownloadDisplay();
+            }
+        }
+
+        // Update download progress display
+        function updateDownloadDisplay() {
+            currentDownload.textContent = downloadCount;
+            shareCount.textContent = `${downloadCount}/${maxDownloads}`;
+            const progressPercent = (downloadCount / maxDownloads) * 100;
+            progressFill.style.width = `${progressPercent}%`;
+        }
+
+        // Check if share wall should be shown
+        function checkDownloadLimit() {
+            if (downloadCount >= maxDownloads) {
+                shareWall.style.display = 'flex';
+                return true;
+            }
+            return false;
+        }
+
+        // Validate TikTok URL
+        function isValidTikTokUrl(url) {
+            const tiktokPatterns = [
+                /https?:\/\/(www\.)?tiktok\.com\/@[\w.]+\/video\/\d+/,
+                /https?:\/\/vm\.tiktok\.com\/[\w]+\//,
+                /https?:\/\/vt\.tiktok\.com\/[\w]+\//
+            ];
+            return tiktokPatterns.some(pattern => pattern.test(url));
+        }
+
+        // Download video function
+        async function downloadVideo() {
+            // Check download limit
+            if (checkDownloadLimit()) {
+                return;
+            }
+
+            const url = videoUrlInput.value.trim();
+            
+            // Reset previous results
+            hideAllMessages();
+            result.style.display = 'none';
+            
+            // Validate URL
+            if (!url) {
+                showError('Please enter a TikTok URL');
+                return;
+            }
+            
+            if (!isValidTikTokUrl(url)) {
+                showError('Please enter a valid TikTok video URL');
+                return;
+            }
+
+            // Show loading
+            showLoading();
+            downloadBtn.disabled = true;
+
+            try {
+                // Call API
+                const response = await fetch(`${API_URL}?url=${encodeURIComponent(url)}`);
+                const data = await response.json();
+                
+                if (data.code === 0 && data.data) {
+                    // Success - display results
+                    displayVideoData(data.data);
+                    showSuccess();
+                    
+                    // Increment download count
+                    downloadCount++;
+                    localStorage.setItem('downloadCount', downloadCount.toString());
+                    updateDownloadDisplay();
+                    
+                    // Check if share wall should be shown after this download
+                    setTimeout(() => {
+                        checkDownloadLimit();
+                    }, 2000);
+                    
+                } else {
+                    showError(data.msg || 'Failed to process video. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Network error. Please check your connection and try again.');
+            } finally {
+                hideLoading();
+                downloadBtn.disabled = false;
+            }
+        }
+
+        // WhatsApp Share Function
+        function shareOnWhatsApp() {
+            const websiteUrl = window.location.href;
+            const shareMessage = `🚀 *Mr.Arslan Toolkit - TikTok Downloader* 🚀
+
+Best TikTok video downloader! Download videos without watermark in HD quality.
+
+✅ No Watermark
+✅ HD Quality  
+✅ Fast Download
+✅ Safe & Secure
+
+🔗 Try it now: ${websiteUrl}
+
+#TikTokDownloader #MrArslanToolkit`;
+
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+            
+            // Open WhatsApp
+            window.open(whatsappUrl, '_blank');
+            
+            // Reset download count after sharing
+            setTimeout(() => {
+                downloadCount = 0;
+                localStorage.setItem('downloadCount', '0');
+                updateDownloadDisplay();
+                shareWall.style.display = 'none';
+            }, 3000);
+        }
+
+        // Display video data
+        function displayVideoData(videoData) {
+            // Set video information
+            videoThumb.src = videoData.cover;
+            videoTitle.textContent = videoData.title || 'TikTok Video';
+            likesCount.textContent = formatCount(videoData.digg_count);
+            commentsCount.textContent = formatCount(videoData.comment_count);
+            sharesCount.textContent = formatCount(videoData.share_count);
+
+            // Generate download options
+            downloadOptions.innerHTML = '';
+
+            // HD Video without watermark
+            if (videoData.play) {
+                addDownloadOption(
+                    videoData.play,
+                    'fas fa-hd-video',
+                    'HD Video',
+                    'No Watermark',
+                    'video_mp4'
+                );
+            }
+
+            // Watermarked video
+            if (videoData.wmplay) {
+                addDownloadOption(
+                    videoData.wmplay,
+                    'fas fa-video',
+                    'Watermarked Video',
+                    'Original',
+                    'video_mp4_wm'
+                );
+            }
+
+            // Music
+            if (videoData.music) {
+                addDownloadOption(
+                    videoData.music,
+                    'fas fa-music',
+                    'Audio Only',
+                    'MP3 Format',
+                    'audio_mp3'
+                );
+            }
+
+            // Show result
+            result.style.display = 'block';
+        }
+
+        // Add download option button
+        function addDownloadOption(url, icon, title, quality, type) {
+            const downloadBtn = document.createElement('a');
+            downloadBtn.href = url;
+            downloadBtn.className = 'download-btn';
+            downloadBtn.setAttribute('download', '');
+            downloadBtn.setAttribute('target', '_blank');
+            downloadBtn.innerHTML = `
+                <i class="${icon}"></i>
+                <span>${title}</span>
+                <div class="quality">${quality}</div>
+            `;
+            downloadOptions.appendChild(downloadBtn);
+        }
+
+        // Format large numbers
+        function formatCount(count) {
+            if (count >= 1000000) {
+                return (count / 1000000).toFixed(1) + 'M';
+            } else if (count >= 1000) {
+                return (count / 1000).toFixed(1) + 'K';
+            }
+            return count;
+        }
+
+        // Utility functions
+        function showLoading() {
+            loading.style.display = 'block';
+        }
+
+        function hideLoading() {
+            loading.style.display = 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        function showSuccess() {
+            successMessage.style.display = 'block';
+        }
+
+        function hideAllMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+        }
+
+        // Enter key support
+        videoUrlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                downloadVideo();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSession();
+            videoUrlInput.focus();
+        });
+    </script>
+</body>
+</html>
